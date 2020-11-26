@@ -1,14 +1,9 @@
-﻿@model IEnumerable<EstacionamentoWeb.Models.Usuario>
+﻿@model IEnumerable<EstacionamentoWeb.Models.Estacionamento>
 
 @{
     ViewData["Title"] = "Index";
 }
-
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<a asp-action="Cadastrar" asp-controller="Estacionamento" class="btn btn-primary">Cadastrar Estacionamento</a>
 <table class="table">
     <thead>
         <tr>
@@ -16,13 +11,13 @@
                 @Html.DisplayNameFor(model => model.Nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => model.Endereco)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cpf)
+                @Html.DisplayNameFor(model => model.Vagas)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Imagem)
+                @Html.DisplayNameFor(model => model.Preco)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CriadoEm)
@@ -38,13 +33,13 @@
                     @Html.DisplayFor(modelItem => item.Nome)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Email)
+                    @Html.DisplayFor(modelItem => item.Endereco)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Cpf)
+                    @Html.DisplayFor(modelItem => item.Vagas)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Imagem)
+                    @Html.DisplayFor(modelItem => item.Preco)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CriadoEm)

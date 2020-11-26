@@ -12,11 +12,11 @@ namespace EstacionamentoWeb.DAL
         public UsuarioDAO(Context context) => _context = context;
         public List<Usuario> Listar() => _context.Usuarios.ToList();
         public Usuario BuscarPorId(int id) => _context.Usuarios.Find(id);
-        public Usuario BuscarPorNome(string nome) => _context.Usuarios.FirstOrDefault(x => x.Nome == nome);
+        public Usuario BuscarPorEmail(string email) => _context.Usuarios.FirstOrDefault(x => x.Email == email);
 
         public bool Cadastrar(Usuario usuario)
         {
-            if (BuscarPorNome(usuario.Nome) == null)
+            if (BuscarPorEmail(usuario.Email) == null)
             {
                 _context.Usuarios.Add(usuario);
                 _context.SaveChanges();

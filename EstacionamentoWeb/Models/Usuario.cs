@@ -20,6 +20,10 @@ namespace EstacionamentoWeb.Models
         public string Cpf { get; set; }
 
         public string Imagem { get; set; }
+        [Required(ErrorMessage = "Campo obrigatório!")]
+        [MinLength(5, ErrorMessage = "A senha deve conter ao menos 5 caracteres")]
+        [MaxLength(15, ErrorMessage = "A senha deve conter no máximo 15 caracteres")]
+        public string Senha { get; set; }
 
     }
 }

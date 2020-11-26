@@ -19,5 +19,16 @@ namespace EstacionamentoWeb.Controllers
             List<Usuario> usuarios = id == 0 ? _usuarioDAO.Listar() : _usuarioDAO.ListarPorNome(id);
             return View(usuarios);
         }
+
+        public IActionResult Login(string email, string senha)
+        {
+            Usuario catchUsuario = _usuarioDAO.BuscarPorEmail(email);
+            if (catchUsuario.Email == email && catchUsuario.Senha == senha)
+            {
+                RedirectToAction("Index", "Home");
+            }
+            ModelState.AddModelError("", "Usuário ou senha incorretos!");
+            return View();
+        }
     }
 }

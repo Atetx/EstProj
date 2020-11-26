@@ -23,7 +23,11 @@
             <input class="form-control" asp-for="Email" type="text" placeholder="Email do Usuario" />
             <span class="text-danger" asp-validation-for="Email"></span>
         </div>
-
+        <div class="form-group">
+            <label asp-for="Senha">Nome:</label>
+            <input class="form-control" asp-for="Senha" type="password" placeholder="Senha" />
+            <span class="text-danger" asp-validation-for="Senha"></span>
+        </div>
         <div class="form-group">
             <label asp-for="Imagem">Imagem:</label>
             <input class="form-control-file" type="file" name="file" />

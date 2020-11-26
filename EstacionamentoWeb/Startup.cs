@@ -28,6 +28,7 @@ namespace EstacionamentoWeb
         {
             services.AddScoped<UsuarioDAO>();
             services.AddScoped<VeiculoDAO>();
+            services.AddScoped<EstacionamentoDAO>();
             services.AddDbContext<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("Connection")));
             services.AddControllersWithViews();
         }
