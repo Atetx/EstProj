@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using EstacionamentoWeb.DAL;
 using EstacionamentoWeb.Models;
+using EstacionamentoWeb.Utils;
 
 namespace EstacionamentoWeb.Controllers
 {
@@ -9,26 +10,17 @@ namespace EstacionamentoWeb.Controllers
     {
         private readonly UsuarioDAO _usuarioDAO;
         private readonly VeiculoDAO _veiculoDAO;
-        public HomeController(UsuarioDAO usuarioDAO, VeiculoDAO veiculoDAO)
+        private readonly Sessao _sessao;
+        public HomeController(UsuarioDAO usuarioDAO, VeiculoDAO veiculoDAO, Sessao sessao)
         {
             _usuarioDAO = usuarioDAO;
             _veiculoDAO = veiculoDAO;
+            _sessao = sessao;
         }
         public IActionResult Index(int id)
         {
             List<Usuario> usuarios = id == 0 ? _usuarioDAO.Listar() : _usuarioDAO.ListarPorNome(id);
             return View(usuarios);
-        }
-
-        public IActionResult Login(string email, string senha)
-        {
-            Usuario catchUsuario = _usuarioDAO.BuscarPorEmail(email);
-            if (catchUsuario.Email == email && catchUsuario.Senha == senha)
-            {
-                RedirectToAction("Index", "Home");
-            }
-            ModelState.AddModelError("", "Usuário ou senha incorretos!");
-            return View();
         }
     }
 }

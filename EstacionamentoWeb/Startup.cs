@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using EstacionamentoWeb.DAL;
 using EstacionamentoWeb.Models;
+using EstacionamentoWeb.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +31,16 @@ namespace EstacionamentoWeb
             services.AddScoped<UsuarioDAO>();
             services.AddScoped<VeiculoDAO>();
             services.AddScoped<EstacionamentoDAO>();
+            services.AddScoped<Sessao>();
+            services.AddHttpContextAccessor();
             services.AddDbContext<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("Connection")));
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Usuario/Login";
+                options.AccessDeniedPath = "/Usuario/AcessoNegado";
+            });
+            services.AddSession();
             services.AddControllersWithViews();
         }
 
@@ -52,6 +63,8 @@ namespace EstacionamentoWeb
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

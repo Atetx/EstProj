@@ -6,16 +6,26 @@ using System;
 using System.IO;
 using EstacionamentoWeb.DAL;
 using EstacionamentoWeb.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace EstacionamentoWeb.Controllers
 {
     public class UsuarioController : Controller
     {
+        private readonly Context _context;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly UsuarioDAO _usuarioDAO;
         private readonly VeiculoDAO _veiculoDAO;
         private readonly IWebHostEnvironment _hosting;
-        public UsuarioController(UsuarioDAO usuarioDAO, IWebHostEnvironment hosting, VeiculoDAO veiculoDAO)
+        private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+        public UsuarioController(UsuarioDAO usuarioDAO, IWebHostEnvironment hosting, VeiculoDAO veiculoDAO, Context context, UserManager<User> userManager, SignInManager<User> signInManager)
         {
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _context = context;
             _usuarioDAO = usuarioDAO;
             _veiculoDAO = veiculoDAO;
             _hosting = hosting;
@@ -31,29 +41,57 @@ namespace EstacionamentoWeb.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastrar(Usuario usuario, IFormFile file)
+        public async Task<IActionResult> Cadastrar([Bind("Nome,Cpf,Email,Senha,Id,CriadoEm,ConfirmacaoSenha")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
-                if (file != null)
+                User user = new User
                 {
-                    string arquivo = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-                    string caminho = Path.Combine(_hosting.WebRootPath, "images", arquivo);
-                    file.CopyTo(new FileStream(caminho, FileMode.CreateNew));
-                    usuario.Imagem = arquivo;
-                }
-                else
+                    UserName = usuario.Email,
+                    Email = usuario.Email
+                };
+                IdentityResult resultado = await _userManager.CreateAsync(user, usuario.Senha);
+                if (resultado.Succeeded)
                 {
-                    usuario.Imagem = "semimagem.png";
+                    _context.Add(usuario);
+                    await _context.SaveChangesAsync();
+                    return Redirect(nameof(Index));
                 }
-                if (_usuarioDAO.Cadastrar(usuario))
-                {
-                    return RedirectToAction("Index", "Usuario");
-                }
-                ModelState.AddModelError("", "Já existe um usuario com o mesmo nome!!!");
+                addErros(resultado);
             }
             return View(usuario);
         }
+        public void addErros(IdentityResult resultado)
+        {
+            foreach (IdentityError erro in resultado.Errors)
+            {
+                ModelState.AddModelError("", erro.Description);
+            }
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login([Bind("Email,Senha")] Usuario usuario)
+        {
+            var logado = await _signInManager.PasswordSignInAsync(usuario.Email, usuario.Senha, false, false);
+            string name = User.Identity.Name;
+            if (logado.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ModelState.AddModelError("", "Login ou senha incorretos");
+            return View(usuario);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
         public IActionResult Remover(int id)
         {
             _usuarioDAO.Remover(id);
