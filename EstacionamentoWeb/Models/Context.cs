@@ -14,5 +14,6 @@ namespace EstacionamentoWeb.Models
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Veiculo> Veiculos { get; set; }
         public DbSet<Estacionamento> Estacionamentos { get; set; }
+        public DbSet<Estacionar> Estacionados { get; set; }
     }
 }

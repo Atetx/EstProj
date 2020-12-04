@@ -9,6 +9,8 @@ using EstacionamentoWeb.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 
 namespace EstacionamentoWeb.Controllers
 {
@@ -19,16 +21,18 @@ namespace EstacionamentoWeb.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly UsuarioDAO _usuarioDAO;
         private readonly VeiculoDAO _veiculoDAO;
+        private readonly IHttpContextAccessor _httpContext;
         private readonly IWebHostEnvironment _hosting;
-        private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
-        public UsuarioController(UsuarioDAO usuarioDAO, IWebHostEnvironment hosting, VeiculoDAO veiculoDAO, Context context, UserManager<User> userManager, SignInManager<User> signInManager)
+
+        public UsuarioController(UsuarioDAO usuarioDAO, IWebHostEnvironment hosting, VeiculoDAO veiculoDAO, Context context, UserManager<User> userManager, SignInManager<User> signInManager, IHttpContextAccessor httpContext)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
             _context = context;
             _usuarioDAO = usuarioDAO;
             _veiculoDAO = veiculoDAO;
             _hosting = hosting;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _httpContext = httpContext;
         }
         public IActionResult Index()
         {
@@ -74,13 +78,13 @@ namespace EstacionamentoWeb.Controllers
             return View();
         }
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([Bind("Email,Senha")] Usuario usuario)
         {
             var logado = await _signInManager.PasswordSignInAsync(usuario.Email, usuario.Senha, false, false);
-            string name = User.Identity.Name;
             if (logado.Succeeded)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Cadastrar", "Veiculos");
             }
             ModelState.AddModelError("", "Login ou senha incorretos");
             return View(usuario);

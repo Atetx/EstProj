@@ -32,6 +32,7 @@ namespace EstacionamentoWeb
             services.AddScoped<VeiculoDAO>();
             services.AddScoped<EstacionamentoDAO>();
             services.AddScoped<Sessao>();
+            services.AddScoped<EstacionarDAO>();
             services.AddHttpContextAccessor();
             services.AddDbContext<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("Connection")));
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();
@@ -63,6 +64,8 @@ namespace EstacionamentoWeb
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseAuthentication();
 
             app.UseSession();
 

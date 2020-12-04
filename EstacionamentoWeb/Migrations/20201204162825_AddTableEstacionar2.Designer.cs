@@ -4,14 +4,16 @@ using EstacionamentoWeb.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EstacionamentoWeb.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20201204162825_AddTableEstacionar2")]
+    partial class AddTableEstacionar2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,13 +65,13 @@ namespace EstacionamentoWeb.Migrations
                     b.Property<DateTime>("CriadoEm")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("EstacionamentoId")
+                    b.Property<int?>("EstacionamentoId")
                         .HasColumnType("int");
 
                     b.Property<int?>("UsuarioId")
                         .HasColumnType("int");
 
-                    b.Property<int>("VeiculoId")
+                    b.Property<int?>("VeiculoId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -363,9 +365,7 @@ namespace EstacionamentoWeb.Migrations
                 {
                     b.HasOne("EstacionamentoWeb.Models.Estacionamento", "Estacionamento")
                         .WithMany()
-                        .HasForeignKey("EstacionamentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EstacionamentoId");
 
                     b.HasOne("EstacionamentoWeb.Models.Usuario", "Usuario")
                         .WithMany()
@@ -373,9 +373,7 @@ namespace EstacionamentoWeb.Migrations
 
                     b.HasOne("EstacionamentoWeb.Models.Veiculo", "Veiculo")
                         .WithMany()
-                        .HasForeignKey("VeiculoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VeiculoId");
 
                     b.Navigation("Estacionamento");
 

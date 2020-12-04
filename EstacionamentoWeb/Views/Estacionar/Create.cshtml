@@ -1,0 +1,20 @@
+﻿@model EstacionamentoWeb.Models.Estacionar
+
+@{
+    ViewData["Title"] = "Create";
+}
+<form asp-action="Create" asp-controller="Estacionar" method="post">
+    <div>
+        <label asp-for="VeiculoId">Categoria:</label><br />
+        <select class="form-control" asp-items="@ViewBag.Veiculos" asp-for="VeiculoId">
+            <option> -- SELECIONE -- </option>
+        </select>
+    </div>
+    <div>
+        <label asp-for="EstacionamentoId">Categoria:</label><br />
+        <select class="form-control" asp-items="@ViewBag.Estacionamentos" asp-for="EstacionamentoId">
+            <option> -- SELECIONE -- </option>
+        </select>
+    </div>
+    <input class="btn btn-info" type="submit" value="Cadastrar" />
+</form>

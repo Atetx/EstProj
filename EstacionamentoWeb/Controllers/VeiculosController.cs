@@ -14,13 +14,15 @@ namespace EstacionamentoWeb.Controllers
     {
         private readonly Context _context;
         private readonly VeiculoDAO _veiculoDAO;
+        private readonly UsuarioDAO _usuarioDAO;
         private readonly IWebHostEnvironment _hosting;
 
-        public VeiculosController(Context context, IWebHostEnvironment hosting, VeiculoDAO veiculoDAO)
+        public VeiculosController(Context context, IWebHostEnvironment hosting, VeiculoDAO veiculoDAO, UsuarioDAO usuarioDAO)
         {
             _veiculoDAO = veiculoDAO;
             _hosting = hosting;
             _context = context;
+            _usuarioDAO = usuarioDAO;
         }
         public IActionResult Index()
         {
@@ -36,7 +38,9 @@ namespace EstacionamentoWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (_veiculoDAO.Cadastrar(veiculo))
+                var email = User.Identity.Name;
+                Usuario usuario = _usuarioDAO.BuscarPorEmail(email);
+                if (_veiculoDAO.Cadastrar(veiculo, usuario))
                 {
                     return RedirectToAction("Index", "Veiculos");
                 }

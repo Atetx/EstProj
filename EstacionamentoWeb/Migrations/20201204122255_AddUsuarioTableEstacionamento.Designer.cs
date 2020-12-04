@@ -4,14 +4,16 @@ using EstacionamentoWeb.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EstacionamentoWeb.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20201204122255_AddUsuarioTableEstacionamento")]
+    partial class AddUsuarioTableEstacionamento
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,7 +42,7 @@ namespace EstacionamentoWeb.Migrations
                     b.Property<double>("Preco")
                         .HasColumnType("float");
 
-                    b.Property<int>("UsuarioId")
+                    b.Property<int?>("UsuarioId")
                         .HasColumnType("int");
 
                     b.Property<int>("Vagas")
@@ -51,36 +53,6 @@ namespace EstacionamentoWeb.Migrations
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("Estacionamentos");
-                });
-
-            modelBuilder.Entity("EstacionamentoWeb.Models.Estacionar", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("EstacionamentoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VeiculoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EstacionamentoId");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.HasIndex("VeiculoId");
-
-                    b.ToTable("Estacionados");
                 });
 
             modelBuilder.Entity("EstacionamentoWeb.Models.User", b =>
@@ -207,7 +179,7 @@ namespace EstacionamentoWeb.Migrations
                         .HasMaxLength(7)
                         .HasColumnType("nvarchar(7)");
 
-                    b.Property<int>("UsuarioId")
+                    b.Property<int?>("UsuarioId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -352,45 +324,16 @@ namespace EstacionamentoWeb.Migrations
                 {
                     b.HasOne("EstacionamentoWeb.Models.Usuario", "Usuario")
                         .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("EstacionamentoWeb.Models.Estacionar", b =>
-                {
-                    b.HasOne("EstacionamentoWeb.Models.Estacionamento", "Estacionamento")
-                        .WithMany()
-                        .HasForeignKey("EstacionamentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EstacionamentoWeb.Models.Usuario", "Usuario")
-                        .WithMany()
                         .HasForeignKey("UsuarioId");
 
-                    b.HasOne("EstacionamentoWeb.Models.Veiculo", "Veiculo")
-                        .WithMany()
-                        .HasForeignKey("VeiculoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Estacionamento");
-
                     b.Navigation("Usuario");
-
-                    b.Navigation("Veiculo");
                 });
 
             modelBuilder.Entity("EstacionamentoWeb.Models.Veiculo", b =>
                 {
                     b.HasOne("EstacionamentoWeb.Models.Usuario", "Usuario")
                         .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UsuarioId");
 
                     b.Navigation("Usuario");
                 });

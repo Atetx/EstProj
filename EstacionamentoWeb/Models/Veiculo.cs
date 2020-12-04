@@ -18,7 +18,9 @@ namespace EstacionamentoWeb.Models
         [MinLength(7, ErrorMessage = "Favor inserir 7 Caracteres")]
         [MaxLength(7, ErrorMessage = "Favor inserer 7 Caracteres")]
         public string Placa { get; set; }
+        [ForeignKey("UsuarioId")]
         public Usuario Usuario { get; set; }
+        public int UsuarioId { get; set; }
 
     }
 }

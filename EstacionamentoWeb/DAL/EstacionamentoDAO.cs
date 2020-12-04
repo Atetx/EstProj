@@ -12,9 +12,18 @@ namespace EstacionamentoWeb.DAL
         public EstacionamentoDAO(Context context) => _context = context;
         public List<Estacionamento> Listar() => _context.Estacionamentos.ToList();
         public Estacionamento BuscarPorId(int id) => _context.Estacionamentos.Find(id);
-        public bool Cadastrar(Estacionamento estacionamento)
+        public List<Estacionamento> ListarPorUsuario(int id) => _context.Estacionamentos.Where(x => x.UsuarioId == id).ToList();
+        public bool Cadastrar(Estacionamento estacionamento, Usuario usuario)
         {
-            _context.Estacionamentos.Add(estacionamento);
+            Estacionamento estacionamentoCad = new Estacionamento
+            {
+                Nome = estacionamento.Nome,
+                Endereco = estacionamento.Endereco,
+                Preco = estacionamento.Preco,
+                Vagas = estacionamento.Vagas,
+                Usuario = usuario
+            };
+            _context.Estacionamentos.Add(estacionamentoCad);
             _context.SaveChanges();
             return true;
         }

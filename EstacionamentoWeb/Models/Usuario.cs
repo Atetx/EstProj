@@ -24,6 +24,5 @@ namespace EstacionamentoWeb.Models
         [NotMapped]
         [Compare("Senha", ErrorMessage = "Campos não coincidem")]
         public string ConfirmacaoSenha { get; set; }
-
     }
 }
