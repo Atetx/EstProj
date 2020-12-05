@@ -50,7 +50,7 @@ namespace EstacionamentoWeb.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Estacionamentos");
+                    b.ToTable("Estacionamento");
                 });
 
             modelBuilder.Entity("EstacionamentoWeb.Models.Estacionar", b =>
@@ -66,10 +66,13 @@ namespace EstacionamentoWeb.Migrations
                     b.Property<int>("EstacionamentoId")
                         .HasColumnType("int");
 
+                    b.Property<int>("QualquerCoisa")
+                        .HasColumnType("int");
+
                     b.Property<int?>("UsuarioId")
                         .HasColumnType("int");
 
-                    b.Property<int>("VeiculoId")
+                    b.Property<int?>("VeiculoId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -80,7 +83,7 @@ namespace EstacionamentoWeb.Migrations
 
                     b.HasIndex("VeiculoId");
 
-                    b.ToTable("Estacionados");
+                    b.ToTable("Estacionar");
                 });
 
             modelBuilder.Entity("EstacionamentoWeb.Models.User", b =>
@@ -351,7 +354,7 @@ namespace EstacionamentoWeb.Migrations
             modelBuilder.Entity("EstacionamentoWeb.Models.Estacionamento", b =>
                 {
                     b.HasOne("EstacionamentoWeb.Models.Usuario", "Usuario")
-                        .WithMany()
+                        .WithMany("Estacionamentos")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -368,14 +371,12 @@ namespace EstacionamentoWeb.Migrations
                         .IsRequired();
 
                     b.HasOne("EstacionamentoWeb.Models.Usuario", "Usuario")
-                        .WithMany()
+                        .WithMany("Estacionados")
                         .HasForeignKey("UsuarioId");
 
                     b.HasOne("EstacionamentoWeb.Models.Veiculo", "Veiculo")
                         .WithMany()
-                        .HasForeignKey("VeiculoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VeiculoId");
 
                     b.Navigation("Estacionamento");
 
@@ -387,7 +388,7 @@ namespace EstacionamentoWeb.Migrations
             modelBuilder.Entity("EstacionamentoWeb.Models.Veiculo", b =>
                 {
                     b.HasOne("EstacionamentoWeb.Models.Usuario", "Usuario")
-                        .WithMany()
+                        .WithMany("Veiculos")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -444,6 +445,15 @@ namespace EstacionamentoWeb.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EstacionamentoWeb.Models.Usuario", b =>
+                {
+                    b.Navigation("Estacionados");
+
+                    b.Navigation("Estacionamentos");
+
+                    b.Navigation("Veiculos");
                 });
 #pragma warning restore 612, 618
         }

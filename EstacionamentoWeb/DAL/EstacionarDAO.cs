@@ -13,15 +13,9 @@ namespace EstacionamentoWeb.DAL
         public List<Estacionar> Listar() => _context.Estacionados.ToList();
         public Estacionar BuscarPorId(int id) => _context.Estacionados.Find(id);
 
-        public bool Cadastrar(Estacionar estacionar, Usuario usuario)
+        public bool Cadastrar(Estacionar estacionar)
         {
-            Estacionar estacionado = new Estacionar
-            {
-                Estacionamento = estacionar.Estacionamento,
-                Veiculo = estacionar.Veiculo,
-                Usuario = usuario
-            };
-            _context.Estacionados.Add(estacionado);
+            _context.Estacionados.Add(estacionar);
             _context.SaveChanges();
             return true;
         }

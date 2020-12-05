@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EstacionamentoWeb.Models;
 using EstacionamentoWeb.DAL;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 
 namespace EstacionamentoWeb.Controllers
 {
@@ -17,14 +19,18 @@ namespace EstacionamentoWeb.Controllers
         private readonly VeiculoDAO _veiculoDAO;
         private readonly EstacionamentoDAO _estacionamentoDAO;
         private readonly EstacionarDAO _estacionarDAO;
+        private readonly IHttpContextAccessor _httpContext;
+        private readonly IWebHostEnvironment _hosting;
 
-        public EstacionarController(Context context, UsuarioDAO usuarioDAO, VeiculoDAO veiculoDAO, EstacionamentoDAO estacionamentoDAO, EstacionarDAO estacionarDAO)
+        public EstacionarController(IHttpContextAccessor httpContext, IWebHostEnvironment hosting, Context context, UsuarioDAO usuarioDAO, VeiculoDAO veiculoDAO, EstacionamentoDAO estacionamentoDAO, EstacionarDAO estacionarDAO)
         {
             _context = context;
             _usuarioDAO = usuarioDAO;
             _veiculoDAO = veiculoDAO;
             _estacionamentoDAO = estacionamentoDAO;
             _estacionarDAO = estacionarDAO;
+            _hosting = hosting;
+            _httpContext = httpContext;
         }
 
         // GET: Estacionar
@@ -42,17 +48,15 @@ namespace EstacionamentoWeb.Controllers
             ViewBag.Estacionamentos = new SelectList(_estacionamentoDAO.ListarPorUsuario(usuarioId), "Id", "Nome");
             return View();
         }
-
-        // POST: Estacionar/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CriadoEm,Estacionamento,Veiculo")] Estacionar estacionar)
+        public IActionResult Create(Estacionar estacionar)
         {
             var email = User.Identity.Name;
             Usuario usuario = _usuarioDAO.BuscarPorEmail(email);
-            if (_estacionarDAO.Cadastrar(estacionar, usuario))
+            estacionar.Veiculo = _veiculoDAO.BuscarPorId(estacionar.QualquerCoisa);
+            estacionar.Estacionamento = _estacionamentoDAO.BuscarPorId(estacionar.EstacionamentoId);
+            estacionar.Usuario = usuario;
+            if (_estacionarDAO.Cadastrar(estacionar))
             {
                 return RedirectToAction("Index", "Estacionar");
             }

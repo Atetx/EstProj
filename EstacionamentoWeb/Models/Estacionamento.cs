@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace EstacionamentoWeb.Models
 {
+    [Table("Estacionamento")]
     public class Estacionamento : BaseModel
     {
         [Required(ErrorMessage = "Campo obrigatório!")]

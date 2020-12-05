@@ -1,5 +1,6 @@
 ﻿using EstacionamentoWeb.Models;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,5 +25,8 @@ namespace EstacionamentoWeb.Models
         [NotMapped]
         [Compare("Senha", ErrorMessage = "Campos não coincidem")]
         public string ConfirmacaoSenha { get; set; }
+        public List<Veiculo> Veiculos { get; set; }
+        public List<Estacionar> Estacionados { get; set; }
+        public List<Estacionamento> Estacionamentos { get; set; }
     }
 }

@@ -7,17 +7,13 @@ using System.Threading.Tasks;
 
 namespace EstacionamentoWeb.Models
 {
+    [Table("Estacionar")]
     public class Estacionar : BaseModel
     {
-        [Required(ErrorMessage = "Campo Obrigatório!")]
         public Usuario Usuario { get; set; }
-        [ForeignKey("VeiculoId")]
-        [Required(ErrorMessage = "Campo Obrigatório!")]
         public Veiculo Veiculo { get; set; }
-        [ForeignKey("EstacionamentoId")]
-        [Required(ErrorMessage = "Campo Obrigatório!")]
         public Estacionamento Estacionamento { get; set; }
-        public int VeiculoId { get; set; }
         public int EstacionamentoId { get; set; }
+        public int QualquerCoisa { get; set; }
     }
 }
